@@ -6,7 +6,6 @@ INSERT INTO `provider_service`
     "type": "object",
     "required": [
       "clusters",
-      "serviceIAMRole"
     ],
     "properties": {
       "clusters": {
@@ -27,8 +26,7 @@ INSERT INTO `provider_service`
             "namespaceConfig": {
               "type": "object",
               "required": [
-                "provider",
-                "isolation"
+                "provider"
               ],
               "properties": {
                 "provider": {
@@ -45,10 +43,6 @@ INSERT INTO `provider_service`
                       "type": "object"
                     }
                   }
-                },
-                "isolation": {
-                  "type": "string",
-                  "enum": ["ENVIRONMENT", "SERVICE", "COMPONENT"]
                 }
               }
             },
@@ -59,10 +53,7 @@ INSERT INTO `provider_service`
         }
       },
       "pullSecrets": {
-          "type": "string"
-      },
-      "serviceIAMRole": {
-          "type": "string"
+          "type": "array"
       },
       "serviceAnnotations": {
           "type": "object"
@@ -214,30 +205,6 @@ INSERT INTO `provider_service`
                  }
                }
              },
-             "granulate": {
-               "type": "object",
-               "required": [],
-               "properties": {
-                 "apiKey": {
-                   "type": "string"
-                 },
-                 "clientName": {
-                   "type": "string"
-                 }
-               }
-             },
-              "elasticAgent": {
-               "type": "object",
-               "required": [],
-               "properties": {
-                 "enrollmentToken": {
-                   "type": "string"
-                 },
-                 "enrollmentUrl": {
-                   "type": "string"
-                 }
-               }
-             },
              "ec2KeyName": {
                "type": "string"
              },
@@ -326,24 +293,38 @@ INSERT INTO `provider_service`
              }
            }
          }', 1, 7),
-         (9, NOW(), NOW(), 1, 'DockerRegistry', '{
+         (8, NOW(), NOW(), 1, 'DockerRegistry', '{
            "type": "object",
            "required": [
-             "repository"
+             "server",
+             "registry",
+             "username",
+             "password"
            ],
            "properties": {
-             "token": {
+             "server": {
                "type": "string"
              },
-             "repository": {
+             "registry": {
                "type": "string"
+             },
+             "username": {
+               "type": "string"
+             },
+             "password": {
+               "type": "string"
+             }
+             "insecure": {
+               "type": "boolean"
+             },
+             "allowPush": {
+               "type": "boolean "
              }
            }
          }', 2, 9),
-         (10, NOW(), NOW(), 1, 'Storage', '{
+         (9, NOW(), NOW(), 1, 'Storage', '{
            "type": "object",
            "required": [
-             "serviceDefinitions",
              "artifacts"
            ],
            "properties": {
@@ -363,27 +344,10 @@ INSERT INTO `provider_service`
                    "type": "string"
                  }
                }
-             },
-             "serviceDefinitions": {
-               "type": "object",
-               "required": [
-                 "repository"
-               ],
-               "properties": {
-                 "token": {
-                   "type": "string"
-                 },
-                 "purpose": {
-                   "type": "string"
-                 },
-                 "repository": {
-                   "type": "string"
-                 }
-               }
              }
            }
          }', 2, 10),
-         (12, NOW(), NOW(), 1, 'HelmRegistry', '{
+         (10, NOW(), NOW(), 1, 'HelmRegistry', '{
            "type": "object",
            "required": [
              "url",
@@ -402,7 +366,7 @@ INSERT INTO `provider_service`
              }
            }
          }', 2, 12),
-         (14, NOW(), NOW(), 1, 'DiscoveryConfig', '{
+         (11, NOW(), NOW(), 1, 'DiscoveryConfig', '{
            "type": "object",
            "required": [
              "discoveryAnnotations"
@@ -412,46 +376,8 @@ INSERT INTO `provider_service`
                "type": "string"
              }
            }
-         }', 6, 4),
-         (18, NOW(), NOW(), 1, 'VPC', '{
-          "type": "object",
-          "required": [
-            "network",
-            "lb",
-            "cloudArmorPolicy"
-          ],
-          "properties": {
-            "network": {
-              "type": "string"
-            },
-            "lb": {
-              "type": "object",
-              "required": [
-                "subnetwork",
-                "certificates"
-              ],
-              "properties": {
-                "subnetwork": {
-                  "type": "object"
-                },
-                "certificates": {
-                  "type": "object"
-                }
-              }
-            },
-            "cloudArmorPolicy": {
-              "type": "object",
-              "properties": {
-                "regional": {
-                  "type": "string"
-                },
-                "global": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }', 7, 3),
+         }', 3, 4)
+
     AS NEW
 ON DUPLICATE KEY UPDATE id                           = NEW.id,
                         version                      = NEW.version,

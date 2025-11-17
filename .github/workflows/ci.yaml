@@ -67,9 +67,9 @@ jobs:
             echo "Error: version must be suffixed with '-SNAPSHOT'. Concrete versions can only be released from master branch"
             exit 1
           fi
-          echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=$PROJECT_VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Publish docker image to jfrog
+      - name: Publish docker image
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           context: .
